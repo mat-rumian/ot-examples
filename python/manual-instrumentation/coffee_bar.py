@@ -2,10 +2,12 @@ from random import randint
 from time import sleep
 
 import logging as log
+log.basicConfig(level=log.INFO)
 
 from opentelemetry import trace
 from opentelemetry.trace import set_span_in_context
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.exporter.zipkin.json import ZipkinExporter
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (
     ConsoleSpanExporter,
@@ -28,12 +30,19 @@ provider.add_span_processor(ssp_processor)
 
 # Add OTLP gRPC Span Exporter - endpoint can be configured via env variable
 # OTEL_EXPORTER_OTLP_ENDPOINT=http://HOSTNAME:4317
-otlp_grpc_exporter = OTLPSpanExporter()
-bsp_processor = BatchSpanProcessor(otlp_grpc_exporter)
-provider.add_span_processor(bsp_processor)
+# OpenTelemetry Collector instance is required to run
+# otlp_grpc_exporter = OTLPSpanExporter()
+# otlp_bsp_processor = BatchSpanProcessor(otlp_grpc_exporter)
+# provider.add_span_processor(otlp_bsp_processor)
+
+# Add Zipkin exporter - endpoint can be configure via env variable
+# OTEL_EXPORTER_ZIPKIN_ENDPOINT=http://hostname:9411/api/v2/spans
+zipkin_exporter = ZipkinExporter()
+zipkin_bsp_processor = BatchSpanProcessor(zipkin_exporter)
+provider.add_span_processor(zipkin_bsp_processor)
 
 trace.set_tracer_provider(provider)
-tracer = trace.get_tracer(__name__)
+tracer = trace.get_tracer('coffee-bar')
 
 
 def coffee_bar():
@@ -43,6 +52,9 @@ def coffee_bar():
 
 
 def prepare_coffee():
+    # For prettier trace view
+    sleep(0.2)
+
     with tracer.start_as_current_span('preparing-coffee') as preparation_span:
         log.info('Coffee preparation in progress...')
         preparation_time = randint(1, 5)
