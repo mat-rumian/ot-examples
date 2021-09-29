@@ -1,5 +1,5 @@
 'use strict';
-const tracer = require('./tracer')()
+const tracer = require('./tracer')();
 
 
 const http = require('http');
