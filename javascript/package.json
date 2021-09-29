@@ -1,11 +1,12 @@
 {
   "dependencies": {
-    "@opentelemetry/api": "^1.0.0-rc.0",
-    "@opentelemetry/exporter-collector": "^0.19.0",
-    "@opentelemetry/instrumentation-http": "^0.19.0",
-    "@opentelemetry/instrumentation-express": "0.16.0",
-    "@opentelemetry/node": "^0.19.0",
-    "@opentelemetry/tracing": "^0.19.0",
+    "@opentelemetry/api": "1.0.3",
+    "@opentelemetry/exporter-collector-proto": "0.25.0",
+    "@opentelemetry/instrumentation-http": "0.25.0",
+    "@opentelemetry/instrumentation-express": "0.25.0",
+    "@opentelemetry/resources": "0.25.0",
+    "@opentelemetry/sdk-trace-base": "0.25.0",
+    "@opentelemetry/sdk-trace-node": "0.25.0",
     "axios": "^0.21.1",
     "cross-env": "^7.0.3",
     "express": "^4.17.1"
