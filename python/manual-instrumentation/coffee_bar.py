@@ -14,6 +14,7 @@ from opentelemetry.sdk.trace.export import (
     SimpleSpanProcessor,
     BatchSpanProcessor)
 from opentelemetry.sdk.resources import Resource
+from opentelemetry.trace.status import Status, StatusCode
 
 # Initiate tracer and set Service Name from the code if is not set from the environment variable
 # OTEL_RESOURCE_ATTRIBUTES=service.name=COFFEE-BAR
@@ -48,20 +49,22 @@ tracer = trace.get_tracer('coffee-bar')
 def coffee_bar():
     with tracer.start_as_current_span('coffee-bar-root-span') as root_span:
         root_span.set_attribute('coffee', 'espresso')
+        #root_span.set_status(Status(StatusCode.ERROR))
         prepare_coffee()
 
 
 def prepare_coffee():
     # For prettier trace view
-    sleep(0.2)
+    sleep(0.01)
 
     with tracer.start_as_current_span('preparing-coffee') as preparation_span:
         log.info('Coffee preparation in progress...')
-        preparation_time = randint(1, 5)
+        preparation_time = 0.01
         sleep(preparation_time)
         preparation_span.set_attribute('preparation_time', preparation_time)
 
         log.info('Coffee done.')
+        #preparation_span.set_status(Status(StatusCode.ERROR))
 
         coffee_pack()
 
@@ -69,11 +72,12 @@ def prepare_coffee():
 def coffee_pack():
     with tracer.start_as_current_span('packing-coffee') as packing_span:
         log.info('Coffee packing in progress...')
-        preparation_time = randint(1, 5)
+        preparation_time = 0.01
         sleep(preparation_time)
         packing_span.set_attribute('packing_time', preparation_time)
 
         log.info('Coffee packing done.')
 
 
-coffee_bar()
+for i in range(0, 10):
+    coffee_bar()
