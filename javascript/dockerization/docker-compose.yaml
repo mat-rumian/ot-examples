@@ -24,10 +24,11 @@ services:
     hostname: js-http
     command: ["node", "http-test.js"]
     depends_on:
+      - js-express
       - otelcol
 
   otelcol:
-    image: public.ecr.aws/sumologic/opentelemetry-collector:0.25.0-sumo-1
+    image: public.ecr.aws/sumologic/opentelemetry-collector:0.38.0-sumo
     container_name: otelcol
     hostname: otelcol
     command: ["--config=/etc/config.yaml"]

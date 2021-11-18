@@ -28,7 +28,6 @@ exporters:
     loglevel: debug
   jaeger:
     endpoint: jaeger:14250
-    insecure: true
   otlphttp:
     traces_endpoint: HTTP_TRACES_URL_HERE
 

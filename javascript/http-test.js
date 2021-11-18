@@ -1,13 +1,14 @@
 'use strict';
-const tracer = require('./tracer')();
+// client - here pass your service name
+const tracer = require('./tracer')('client');
 
 
 const http = require('http');
 
 http.get({
-      host: 'httpbin.org',
-      port: 80,
-      path: '/',
+      host: 'express-svc',
+      port: 8081,
+      path: '/run_test',
     }, (response) => {
       const body = [];
       response.on('data', (chunk) => body.push(chunk));

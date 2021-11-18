@@ -3,7 +3,7 @@
 const opentelemetry = require('@opentelemetry/api');
 
 const { NodeTracerProvider } = require('@opentelemetry/sdk-trace-node');
-const { CollectorTraceExporter } = require('@opentelemetry/exporter-collector-proto');
+const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-proto');
 const { registerInstrumentations } = require('@opentelemetry/instrumentation');
 const { Resource } = require('@opentelemetry/resources');
 
@@ -18,9 +18,9 @@ const { BatchSpanProcessor } = require('@opentelemetry/sdk-trace-base');
 //const { diag, DiagConsoleLogger, DiagLogLevel } = opentelemetry;
 //diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
 
-module.exports = () => {
+module.exports = (name) => {
  const resources = new Resource({
-  'service.name': 'YOUR_SERVICE_NAME',
+  'service.name': name,
   'application': 'YOUR_APPLICATION_NAME',
   //'ANY_OTHER_ATTRIBUTE_KEY': 'ANY_OTHER_ATTRIBUTE_VALUE',
  });
@@ -35,7 +35,7 @@ module.exports = () => {
  //const consoleExporter = new ConsoleSpanExporter();
  //provider.addSpanProcessor(new BatchSpanProcessor(consoleExporter));
 
- const exporter = new CollectorTraceExporter(exporterOptions);
+ const exporter = new OTLPTraceExporter(exporterOptions);
  provider.addSpanProcessor(new BatchSpanProcessor(exporter));
  provider.register();
 

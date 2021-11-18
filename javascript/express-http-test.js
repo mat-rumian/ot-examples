@@ -1,4 +1,5 @@
-const tracer = require('./tracer')();
+// express - here pass your service name
+const tracer = require('./tracer')('express');
 
 // Require in rest of modules
 const express = require('express');
@@ -7,6 +8,7 @@ const axios = require('axios').default;
 // Setup express
 const app = express();
 const PORT = 8081;
+const HOST = 'express-svc'
 
 const getCrudController = () => {
   const router = express.Router();
@@ -31,7 +33,7 @@ const authMiddleware = (req, res, next) => {
 app.use(express.json());
 app.get('/run_test', async (req, res) => {
   // Calls another endpoint of the same API, somewhat mimicing an external API call
-  const createdCat = await axios.post(`http://localhost:${PORT}/cats`, {
+  const createdCat = await axios.post(`http://${HOST}:${PORT}/cats`, {
     name: 'Tom',
     friends: [
       'Jerry',
@@ -46,6 +48,6 @@ app.get('/run_test', async (req, res) => {
 });
 app.use('/cats', authMiddleware, getCrudController());
 
-app.listen(PORT, () => {
-  console.log(`Listening on http://localhost:${PORT}`);
+app.listen(PORT, HOST, () => {
+  console.log(`Listening on http://${HOST}:${PORT}`);
 });
