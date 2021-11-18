@@ -24,7 +24,7 @@ module.exports = (name) => {
   'application': 'YOUR_APPLICATION_NAME',
   //'ANY_OTHER_ATTRIBUTE_KEY': 'ANY_OTHER_ATTRIBUTE_VALUE',
  });
- //opentelemetry.propagation.setGlobalPropagator(new CompositePropagator());
+
  const provider = new NodeTracerProvider({ resource: resources});
 
  const exporterOptions = {
