@@ -10,12 +10,13 @@ services:
     hostname: simple-service
     command: ["cmd/simple-service"]
     environment:
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:55681
       - OTEL_RESOURCE_ATTRIBUTES=service.name=golang-test,application=simple-service-app
     depends_on:
       - otelcol
 
   otelcol:
-    image: public.ecr.aws/sumologic/opentelemetry-collector:0.25.0-sumo-1
+    image: public.ecr.aws/sumologic/opentelemetry-collector:latest
     container_name: otelcol
     hostname: otelcol
     command: ["--config=/etc/config.yaml"]

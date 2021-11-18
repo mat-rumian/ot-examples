@@ -11,23 +11,17 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/baggage"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp"
+
 	//"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/trace"
-	"google.golang.org/grpc"
 )
 
 func initTracer() func() {
     ctx := context.Background()
     
-    otlpOptions := []otlptracegrpc.Option{
-        otlptracegrpc.WithInsecure(),
-        otlptracegrpc.WithEndpoint("otelcol:4317"),
-        otlptracegrpc.WithDialOption(grpc.WithBlock()),
-    }
-
-    client := otlptracegrpc.NewClient(otlpOptions...)
+    client := otlptracehttp.NewClient()
 
     otlpTraceExporter, err := otlptrace.New(ctx, client)
     if err != nil {
