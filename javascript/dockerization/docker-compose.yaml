@@ -28,7 +28,7 @@ services:
       - otelcol
 
   otelcol:
-    image: public.ecr.aws/sumologic/opentelemetry-collector:0.38.0-sumo
+    image: public.ecr.aws/sumologic/opentelemetry-collector:0.38.1-sumo
     container_name: otelcol
     hostname: otelcol
     command: ["--config=/etc/config.yaml"]
