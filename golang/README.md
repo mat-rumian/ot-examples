@@ -28,33 +28,33 @@ Attaching to otelcol, simple-service
 simple-service  | Response status code: 200 OK
 simple-service  | Waiting for few seconds to export spans ...
 simple-service  | 
-otelcol         | 2021-10-01T11:34:47.672Z      INFO    loggingexporter/logging_exporter.go:332 TracesExporter  {"#spans": 1}
-otelcol         | 2021-10-01T11:34:47.673Z      DEBUG   loggingexporter/logging_exporter.go:371 ResourceSpans #0
+otelcol         | 2022-02-16T15:00:22.409Z      INFO    loggingexporter/logging_exporter.go:41  TracesExporter  {"#spans": 1}
+otelcol         | 2022-02-16T15:00:22.409Z      DEBUG   loggingexporter/logging_exporter.go:51  ResourceSpans #0
 otelcol         | Resource labels:
 otelcol         |      -> application: STRING(simple-service-app)
 otelcol         |      -> service.name: STRING(golang-test)
 otelcol         |      -> telemetry.sdk.language: STRING(go)
 otelcol         |      -> telemetry.sdk.name: STRING(opentelemetry)
-otelcol         |      -> telemetry.sdk.version: STRING(1.0.0)
+otelcol         |      -> telemetry.sdk.version: STRING(1.4.0)
 otelcol         | InstrumentationLibrarySpans #0
-otelcol         | InstrumentationLibrary go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp semver:0.24.0
+otelcol         | InstrumentationLibrary go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp semver:0.29.0
 otelcol         | Span #0
-otelcol         |     Trace ID       : 24ff4183f36efe12ace062e29d20c5a7
+otelcol         |     Trace ID       : 5b5d14913aa89820f1eebff5262a4bcc
 otelcol         |     Parent ID      : 
-otelcol         |     ID             : 165f7c545973bdee
+otelcol         |     ID             : 730c6300be41c32c
 otelcol         |     Name           : HTTP GET
 otelcol         |     Kind           : SPAN_KIND_CLIENT
-otelcol         |     Start time     : 2021-10-01 11:34:42.669197405 +0000 UTC
-otelcol         |     End time       : 2021-10-01 11:34:43.320488098 +0000 UTC
+otelcol         |     Start time     : 2022-02-16 15:00:17.4361504 +0000 UTC
+otelcol         |     End time       : 2022-02-16 15:00:17.6382554 +0000 UTC
 otelcol         |     Status code    : STATUS_CODE_UNSET
 otelcol         |     Status message : 
 otelcol         | Attributes:
 otelcol         |      -> http.method: STRING(GET)
-otelcol         |      -> http.url: STRING(https://sumologic.com)
+otelcol         |      -> http.url: STRING(http://sumologic.com)
 otelcol         |      -> http.scheme: STRING(http)
 otelcol         |      -> http.host: STRING(sumologic.com)
 otelcol         |      -> http.flavor: STRING(1.1)
 otelcol         |      -> http.status_code: INT(301)
-otelcol         | 
+otelcol         |
 simple-service exited with code 0
 ```

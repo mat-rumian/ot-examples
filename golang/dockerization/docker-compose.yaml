@@ -10,8 +10,9 @@ services:
     hostname: simple-service
     command: ["cmd/simple-service"]
     environment:
-      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:55681
-      - OTEL_RESOURCE_ATTRIBUTES=service.name=golang-test,application=simple-service-app
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318
+      - OTEL_RESOURCE_ATTRIBUTES=application=simple-service-app
+      - OTEL_SERVICE_NAME=golang-test
     depends_on:
       - otelcol
 
@@ -30,3 +31,4 @@ services:
       - 55681:55681
       - 14268:14268
       - 9411:9411
+      - 4318:4318
