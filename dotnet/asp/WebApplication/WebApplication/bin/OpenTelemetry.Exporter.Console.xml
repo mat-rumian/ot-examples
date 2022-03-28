@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OpenTelemetry.Exporter.Console</name>
+    </assembly>
+    <members>
+        <member name="P:OpenTelemetry.Exporter.ConsoleExporterOptions.Targets">
+            <summary>
+            Gets or sets the output targets for the console exporter.
+            </summary>
+        </member>
+        <member name="P:OpenTelemetry.Exporter.ConsoleExporterOptions.MetricReaderType">
+            <summary>
+            Gets or sets the <see cref="P:OpenTelemetry.Exporter.ConsoleExporterOptions.MetricReaderType" /> to use. Defaults to <c>MetricReaderType.Manual</c>.
+            </summary>
+        </member>
+        <member name="P:OpenTelemetry.Exporter.ConsoleExporterOptions.PeriodicExportingMetricReaderOptions">
+            <summary>
+            Gets or sets the <see cref="P:OpenTelemetry.Exporter.ConsoleExporterOptions.PeriodicExportingMetricReaderOptions" /> options. Ignored unless <c>MetricReaderType</c> is <c>Periodic</c>.
+            </summary>
+        </member>
+        <member name="P:OpenTelemetry.Exporter.ConsoleExporterOptions.AggregationTemporality">
+            <summary>
+            Gets or sets the AggregationTemporality used for Histogram
+            and Sum metrics.
+            </summary>
+        </member>
+        <member name="F:OpenTelemetry.Exporter.ConsoleExporterOutputTargets.Console">
+            <summary>
+            Output to the Console (stdout).
+            </summary>
+        </member>
+        <member name="F:OpenTelemetry.Exporter.ConsoleExporterOutputTargets.Debug">
+            <summary>
+            Output to the Debug trace.
+            </summary>
+        </member>
+        <member name="M:OpenTelemetry.Trace.ConsoleExporterHelperExtensions.AddConsoleExporter(OpenTelemetry.Trace.TracerProviderBuilder,System.Action{OpenTelemetry.Exporter.ConsoleExporterOptions})">
+            <summary>
+            Adds Console exporter to the TracerProvider.
+            </summary>
+            <param name="builder"><see cref="T:OpenTelemetry.Trace.TracerProviderBuilder"/> builder to use.</param>
+            <param name="configure">Exporter configuration options.</param>
+            <returns>The instance of <see cref="T:OpenTelemetry.Trace.TracerProviderBuilder"/> to chain the calls.</returns>
+        </member>
+        <member name="M:OpenTelemetry.Logs.ConsoleExporterLoggingExtensions.AddConsoleExporter(OpenTelemetry.Logs.OpenTelemetryLoggerOptions,System.Action{OpenTelemetry.Exporter.ConsoleExporterOptions})">
+            <summary>
+            Adds Console Exporter as a configuration to the OpenTelemetry ILoggingBuilder.
+            </summary>
+            <param name="loggerOptions"><see cref="T:OpenTelemetry.Logs.OpenTelemetryLoggerOptions"/> options to use.</param>
+            <param name="configure">Exporter configuration options.</param>
+            <returns>The instance of <see cref="T:OpenTelemetry.Logs.OpenTelemetryLoggerOptions"/> to chain the calls.</returns>
+        </member>
+        <member name="M:OpenTelemetry.Metrics.ConsoleExporterMetricsExtensions.AddConsoleExporter(OpenTelemetry.Metrics.MeterProviderBuilder,System.Action{OpenTelemetry.Exporter.ConsoleExporterOptions})">
+            <summary>
+            Adds Console exporter to the TracerProvider.
+            </summary>
+            <param name="builder"><see cref="T:OpenTelemetry.Metrics.MeterProviderBuilder"/> builder to use.</param>
+            <param name="configure">Exporter configuration options.</param>
+            <returns>The instance of <see cref="T:OpenTelemetry.Metrics.MeterProviderBuilder"/> to chain the calls.</returns>
+        </member>
+        <member name="T:OpenTelemetry.Internal.Guard">
+            <summary>
+            Methods for guarding against exception throwing values.
+            </summary>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfNull(System.Object,System.String)">
+            <summary>
+            Throw an exception if the value is null.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfNullOrEmpty(System.String,System.String)">
+            <summary>
+            Throw an exception if the value is null or empty.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfNullOrWhitespace(System.String,System.String)">
+            <summary>
+            Throw an exception if the value is null or whitespace.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfZero(System.Int32,System.String,System.String)">
+            <summary>
+            Throw an exception if the value is zero.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="message">The message to use in the thrown exception.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfInvalidTimeout(System.Int32,System.String)">
+            <summary>
+            Throw an exception if the value is not considered a valid timeout.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfOutOfRange(System.Int32,System.String,System.Int32,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Throw an exception if the value is not within the given range.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+            <param name="min">The inclusive lower bound.</param>
+            <param name="max">The inclusive upper bound.</param>
+            <param name="minName">The name of the lower bound.</param>
+            <param name="maxName">The name of the upper bound.</param>
+            <param name="message">An optional custom message to use in the thrown exception.</param>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfOutOfRange(System.Double,System.String,System.Double,System.Double,System.String,System.String,System.String)">
+            <summary>
+            Throw an exception if the value is not within the given range.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+            <param name="min">The inclusive lower bound.</param>
+            <param name="max">The inclusive upper bound.</param>
+            <param name="minName">The name of the lower bound.</param>
+            <param name="maxName">The name of the upper bound.</param>
+            <param name="message">An optional custom message to use in the thrown exception.</param>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfNotOfType``1(System.Object,System.String)">
+            <summary>
+            Throw an exception if the value is not of the expected type.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+            <typeparam name="T">The type attempted to convert to.</typeparam>
+            <returns>The value casted to the specified type.</returns>
+        </member>
+        <member name="T:System.ServiceProviderExtensions">
+            <summary>
+            Extension methods for OpenTelemetry dependency injection support.
+            </summary>
+        </member>
+        <member name="M:System.ServiceProviderExtensions.GetOptions``1(System.IServiceProvider)">
+            <summary>
+            Get options from the supplied <see cref="T:System.IServiceProvider"/>.
+            </summary>
+            <typeparam name="T">Options type.</typeparam>
+            <param name="serviceProvider"><see cref="T:System.IServiceProvider"/>.</param>
+            <returns>Options instance.</returns>
+        </member>
+    </members>
+</doc>

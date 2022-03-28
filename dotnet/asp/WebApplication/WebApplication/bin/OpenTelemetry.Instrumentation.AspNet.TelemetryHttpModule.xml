@@ -1,0 +1,210 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OpenTelemetry.Instrumentation.AspNet.TelemetryHttpModule</name>
+    </assembly>
+    <members>
+        <member name="T:OpenTelemetry.Instrumentation.AspNet.ActivityHelper">
+            <summary>
+            Activity helper class.
+            </summary>
+        </member>
+        <member name="F:OpenTelemetry.Instrumentation.AspNet.ActivityHelper.ContextKey">
+            <summary>
+            Key to store the state in HttpContext.
+            </summary>
+        </member>
+        <member name="M:OpenTelemetry.Instrumentation.AspNet.ActivityHelper.HasStarted(System.Web.HttpContext,System.Diagnostics.Activity@)">
+            <summary>
+            Try to get the started <see cref="T:System.Diagnostics.Activity"/> for the running <see
+            cref="T:System.Web.HttpContext"/>.
+            </summary>
+            <param name="context"><see cref="T:System.Web.HttpContext"/>.</param>
+            <param name="aspNetActivity">Started <see cref="T:System.Diagnostics.Activity"/> or <see
+            langword="null"/> if 1) start has not been called or 2) start was
+            called but sampling decided not to create an instance.</param>
+            <returns><see langword="true"/> if start has been called.</returns>
+        </member>
+        <member name="M:OpenTelemetry.Instrumentation.AspNet.ActivityHelper.StartAspNetActivity(OpenTelemetry.Context.Propagation.TextMapPropagator,System.Web.HttpContext,System.Action{System.Diagnostics.Activity,System.Web.HttpContext})">
+            <summary>
+            Creates root (first level) activity that describes incoming request.
+            </summary>
+            <param name="textMapPropagator"><see cref="T:OpenTelemetry.Context.Propagation.TextMapPropagator"/>.</param>
+            <param name="context"><see cref="T:System.Web.HttpContext"/>.</param>
+            <param name="onRequestStartedCallback">Callback action.</param>
+            <returns>New root activity.</returns>
+        </member>
+        <member name="M:OpenTelemetry.Instrumentation.AspNet.ActivityHelper.StopAspNetActivity(OpenTelemetry.Context.Propagation.TextMapPropagator,System.Diagnostics.Activity,System.Web.HttpContext,System.Action{System.Diagnostics.Activity,System.Web.HttpContext})">
+            <summary>
+            Stops the activity and notifies listeners about it.
+            </summary>
+            <param name="textMapPropagator"><see cref="T:OpenTelemetry.Context.Propagation.TextMapPropagator"/>.</param>
+            <param name="aspNetActivity"><see cref="T:System.Diagnostics.Activity"/>.</param>
+            <param name="context"><see cref="T:System.Web.HttpContext"/>.</param>
+            <param name="onRequestStoppedCallback">Callback action.</param>
+        </member>
+        <member name="M:OpenTelemetry.Instrumentation.AspNet.ActivityHelper.WriteActivityException(System.Diagnostics.Activity,System.Web.HttpContext,System.Exception,System.Action{System.Diagnostics.Activity,System.Web.HttpContext,System.Exception})">
+            <summary>
+            Notifies listeners about an unhandled exception thrown on the <see cref="T:System.Web.HttpContext"/>.
+            </summary>
+            <param name="aspNetActivity"><see cref="T:System.Diagnostics.Activity"/>.</param>
+            <param name="context"><see cref="T:System.Web.HttpContext"/>.</param>
+            <param name="exception"><see cref="T:System.Exception"/>.</param>
+            <param name="onExceptionCallback">Callback action.</param>
+        </member>
+        <member name="M:OpenTelemetry.Instrumentation.AspNet.ActivityHelper.RestoreContextIfNeeded(System.Web.HttpContext)">
+            <summary>
+            It's possible that a request is executed in both native threads and managed threads,
+            in such case Activity.Current will be lost during native thread and managed thread switch.
+            This method is intended to restore the current activity in order to correlate the child
+            activities with the root activity of the request.
+            </summary>
+            <param name="context"><see cref="T:System.Web.HttpContext"/>.</param>
+        </member>
+        <member name="T:OpenTelemetry.Instrumentation.AspNet.AspNetTelemetryEventSource">
+            <summary>
+            ETW EventSource tracing class.
+            </summary>
+        </member>
+        <member name="F:OpenTelemetry.Instrumentation.AspNet.AspNetTelemetryEventSource.Log">
+            <summary>
+            Instance of the PlatformEventSource class.
+            </summary>
+        </member>
+        <member name="T:OpenTelemetry.Instrumentation.AspNet.TelemetryHttpModule">
+            <summary>
+            Http Module sets ambient state using Activity API from DiagnosticsSource package.
+            </summary>
+        </member>
+        <member name="F:OpenTelemetry.Instrumentation.AspNet.TelemetryHttpModule.AspNetSourceName">
+            <summary>
+            OpenTelemetry.Instrumentation.AspNet <see cref="T:System.Diagnostics.ActivitySource"/> name.
+            </summary>
+        </member>
+        <member name="F:OpenTelemetry.Instrumentation.AspNet.TelemetryHttpModule.AspNetActivityName">
+            <summary>
+            <see cref="P:System.Diagnostics.Activity.OperationName"/> for OpenTelemetry.Instrumentation.AspNet created <see cref="T:System.Diagnostics.Activity"/> objects.
+            </summary>
+        </member>
+        <member name="P:OpenTelemetry.Instrumentation.AspNet.TelemetryHttpModule.Options">
+            <summary>
+            Gets the <see cref="T:OpenTelemetry.Instrumentation.AspNet.TelemetryHttpModuleOptions"/> applied to requests processed by the handler.
+            </summary>
+        </member>
+        <member name="M:OpenTelemetry.Instrumentation.AspNet.TelemetryHttpModule.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:OpenTelemetry.Instrumentation.AspNet.TelemetryHttpModule.Init(System.Web.HttpApplication)">
+            <inheritdoc />
+        </member>
+        <member name="T:OpenTelemetry.Instrumentation.AspNet.TelemetryHttpModuleOptions">
+            <summary>
+            Stores options for the <see cref="T:OpenTelemetry.Instrumentation.AspNet.TelemetryHttpModule"/>.
+            </summary>
+        </member>
+        <member name="P:OpenTelemetry.Instrumentation.AspNet.TelemetryHttpModuleOptions.TextMapPropagator">
+            <summary>
+            Gets or sets the <see cref="T:OpenTelemetry.Context.Propagation.TextMapPropagator"/> to use to
+            extract <see cref="T:OpenTelemetry.Context.Propagation.PropagationContext"/> from incoming requests.
+            </summary>
+        </member>
+        <member name="P:OpenTelemetry.Instrumentation.AspNet.TelemetryHttpModuleOptions.OnRequestStartedCallback">
+            <summary>
+            Gets or sets a callback action to be fired when a request is started.
+            </summary>
+        </member>
+        <member name="P:OpenTelemetry.Instrumentation.AspNet.TelemetryHttpModuleOptions.OnRequestStoppedCallback">
+            <summary>
+            Gets or sets a callback action to be fired when a request is stopped.
+            </summary>
+        </member>
+        <member name="P:OpenTelemetry.Instrumentation.AspNet.TelemetryHttpModuleOptions.OnExceptionCallback">
+            <summary>
+            Gets or sets a callback action to be fired when an unhandled
+            exception is thrown processing a request.
+            </summary>
+        </member>
+        <member name="M:OpenTelemetry.Internal.ExceptionExtensions.ToInvariantString(System.Exception)">
+            <summary>
+            Returns a culture-independent string representation of the given <paramref name="exception"/> object,
+            appropriate for diagnostics tracing.
+            </summary>
+            <param name="exception">Exception to convert to string.</param>
+            <returns>Exception as string with no culture.</returns>
+        </member>
+        <member name="T:OpenTelemetry.Internal.Guard">
+            <summary>
+            Methods for guarding against exception throwing values.
+            </summary>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfNull(System.Object,System.String)">
+            <summary>
+            Throw an exception if the value is null.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfNullOrEmpty(System.String,System.String)">
+            <summary>
+            Throw an exception if the value is null or empty.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfNullOrWhitespace(System.String,System.String)">
+            <summary>
+            Throw an exception if the value is null or whitespace.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfZero(System.Int32,System.String,System.String)">
+            <summary>
+            Throw an exception if the value is zero.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="message">The message to use in the thrown exception.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfInvalidTimeout(System.Int32,System.String)">
+            <summary>
+            Throw an exception if the value is not considered a valid timeout.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfOutOfRange(System.Int32,System.String,System.Int32,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Throw an exception if the value is not within the given range.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+            <param name="min">The inclusive lower bound.</param>
+            <param name="max">The inclusive upper bound.</param>
+            <param name="minName">The name of the lower bound.</param>
+            <param name="maxName">The name of the upper bound.</param>
+            <param name="message">An optional custom message to use in the thrown exception.</param>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfOutOfRange(System.Double,System.String,System.Double,System.Double,System.String,System.String,System.String)">
+            <summary>
+            Throw an exception if the value is not within the given range.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+            <param name="min">The inclusive lower bound.</param>
+            <param name="max">The inclusive upper bound.</param>
+            <param name="minName">The name of the lower bound.</param>
+            <param name="maxName">The name of the upper bound.</param>
+            <param name="message">An optional custom message to use in the thrown exception.</param>
+        </member>
+        <member name="M:OpenTelemetry.Internal.Guard.ThrowIfNotOfType``1(System.Object,System.String)">
+            <summary>
+            Throw an exception if the value is not of the expected type.
+            </summary>
+            <param name="value">The value to check.</param>
+            <param name="paramName">The parameter name to use in the thrown exception.</param>
+            <typeparam name="T">The type attempted to convert to.</typeparam>
+            <returns>The value casted to the specified type.</returns>
+        </member>
+    </members>
+</doc>
