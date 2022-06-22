@@ -1,4 +1,4 @@
-# Sumo Logic OTel Distro Collector for AWS ECS
+# Sumo Logic OTel Distro Collector for AWS ECS (awsvpc network mode)
 
 ## Installation
 ### Environment configuration

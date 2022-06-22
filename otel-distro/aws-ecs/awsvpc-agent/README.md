@@ -1,4 +1,4 @@
-# Sumo Logic OTel Distro Agent for AWS ECS
+# Sumo Logic OTel Distro Agent for AWS ECS (awsvpc network mode)
 
 ## Installation
 ### Environment configuration
