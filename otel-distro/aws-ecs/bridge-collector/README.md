@@ -5,7 +5,7 @@
 Set up the following environment variables that are needed to perform the AWS OpenTelemetry Collector deployment:
 * CLUSTER_NAME - your ECS Cluster name setup from prerequisite
 * AWS_REGION - your ECS Cluster deployment region
-* TEMPLATE_PATH - path to the OTel Distro Collector cloud formation template file [EC2](./otel-distro-collector-bridge-ec2.yaml) or [Fargate](otel-distro-collector-bridge-fargate.yaml)
+* TEMPLATE_PATH - path to the OTel Distro Collector cloud formation template file [EC2](./otel-distro-collector-bridge-ec2.yaml)
 * SUMO_OTLP_HTTP_URL - mandatory Sumo Logic OTLP HTTP Source URL
 
 ### Stack deployment
