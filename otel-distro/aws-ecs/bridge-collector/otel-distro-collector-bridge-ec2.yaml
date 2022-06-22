@@ -1,0 +1,168 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: 'Template to install Sumo Logic OTel Distro Collector on ECS in EC2 mode'
+Parameters:
+  IAMTaskRole:
+    Description: Task attached IAM role
+    Type: String
+    Default: SumoLogicOtelDistroCollectorTaskRoleECSEC2Bridge
+    ConstraintDescription: must be an existing IAM role which will be attached to EC2 instance.
+  IAMExecutionRole:
+    Description: Task Execution attached IAM role
+    Type: String
+    Default: SumoLogicOtelDistroCollectorExecutionRoleECSEC2Bridge
+    ConstraintDescription: must be an existing IAM role which will be attached to EC2 instance.
+  IAMPolicy:
+    Description: IAM Role attached IAM Policy
+    Type: String
+    Default: SumoLogicOtelDistroCollectorPolicyECSEC2Bridge
+    ConstraintDescription: Must be an existing IAM Managed Policy which will be attached to IAM Role.
+  ClusterName:
+    Type: String
+    Description: Enter the name of your ECS cluster from which you want to collect telemetry data
+  OtlpHttpEndpoint:
+    Type: String
+    Description: OTLP HTTP Traces Endpoint
+  SumologicOtelDistroConfigCollectorParameterName:
+    Type: String
+    Default: sumologic-otel-distro-config-collector-ec2-bridge
+    Description: OTel Distro Configuration Parameter Name
+  SumologicReplicaServiceName:
+    Type: String
+    Default: sumologic-otel-distro-collector-svc-ec2-bridge
+    Description: ECS Service Name
+Resources:
+  ECSTaskDefinition:
+    Type: 'AWS::ECS::TaskDefinition'
+    Properties:
+      Family: sumologic-aws-otel-collector-ec2-bridge
+      TaskRoleArn: !Sub 'arn:aws:iam::${AWS::AccountId}:role/${IAMTaskRole}'
+      ExecutionRoleArn: !Sub 'arn:aws:iam::${AWS::AccountId}:role/${IAMExecutionRole}'
+      ContainerDefinitions:
+        - LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-create-group: 'True'
+              awslogs-group: /ecs/aws-otel-collector
+              awslogs-region: !Ref 'AWS::Region'
+              awslogs-stream-prefix: ecs
+          PortMappings:
+            - HostPort: 4317
+              Protocol: tcp
+              ContainerPort: 4317
+            - HostPort: 4318
+              Protocol: tcp
+              ContainerPort: 4318
+          Image: public.ecr.aws/sumologic/sumologic-otel-collector:0.52.0-sumo-1
+          Name: sumologic-otel-distro-collector
+          Command:
+            - --config=env:OTEL_DISTRO_CONFIG
+          Secrets:
+            - Name: "OTEL_DISTRO_CONFIG"
+              ValueFrom: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${SumologicOtelDistroConfigCollectorParameterName}"
+      RequiresCompatibilities:
+        - EC2
+      Cpu: 1024
+      Memory: 2048
+    DependsOn:
+      - ECSTaskRole
+      - ECSExecutionRole
+      - ECSEC2SumologicOtelDistroConfigParam
+
+  ECSEC2SumologicOtelDistroConfigParam:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Ref SumologicOtelDistroConfigCollectorParameterName
+      Type: String
+      Value: !Sub
+        - |
+          extensions:
+            health_check:
+          receivers:
+            otlp:
+              protocols:
+                grpc:
+                http:
+          processors:
+            batch:
+              timeout: 5s
+              send_batch_size: 256
+            # Provides backpressure mechanism. See
+            # https://github.com/open-telemetry/opentelemetry-collector/tree/main/processor/memorylimiterprocessor for details
+            memory_limiter:
+              check_interval: 1s
+              limit_mib: 1500
+              spike_limit_mib: 800
+            # See examples on how to configure cascading filter
+            # https://github.com/SumoLogic/sumologic-otel-collector/tree/main/pkg/processor/cascadingfilterprocessor#examples
+            cascading_filter:
+          exporters:
+            otlphttp:
+              endpoint: ${OtlpHttpEndpoint}
+            logging:
+          service:
+            extensions: [health_check]
+            pipelines:
+              traces:
+                receivers: [otlp]
+                processors: [memory_limiter, cascading_filter, batch]
+                exporters: [otlphttp]
+        - OtlpHttpEndpoint: !Ref OtlpHttpEndpoint
+      Description: OTel Distro Configuration
+
+  ECSReplicaService:
+    Type: 'AWS::ECS::Service'
+    Properties:
+      TaskDefinition: !Ref ECSTaskDefinition
+      Cluster: !Ref ClusterName
+      LaunchType: EC2
+      SchedulingStrategy: REPLICA
+      DesiredCount: 1
+      ServiceName: !Ref SumologicReplicaServiceName
+
+  ECSTaskRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      Description: Allows ECS tasks to call AWS services on your behalf.
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Policies:
+        - PolicyName: !Ref IAMPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'logs:PutLogEvents'
+                  - 'logs:CreateLogGroup'
+                  - 'logs:CreateLogStream'
+                  - 'logs:DescribeLogStreams'
+                  - 'logs:DescribeLogGroups'
+                  - 'ssm:GetParameters'
+                Resource: '*'
+      RoleName: !Ref IAMTaskRole
+
+  ECSExecutionRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      Description: >-
+        Allows ECS container collector makes calls to the Amazon ECS API on your
+        behalf.
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: ''
+            Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy'
+        - 'arn:aws:iam::aws:policy/CloudWatchLogsFullAccess'
+        - 'arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess'
+      RoleName: !Ref IAMExecutionRole
