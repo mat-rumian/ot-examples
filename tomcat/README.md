@@ -1,4 +1,4 @@
-# OpenTelemetry Apache Tomcat Java Auto-Instrumentation
+# OpenTelemetry Java Auto-Instrumentation for Apache Tomcat
 
 ## Pre-req
 * docker
