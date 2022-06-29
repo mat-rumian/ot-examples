@@ -1,0 +1,33 @@
+receivers:
+  opencensus: 
+  jaeger:
+    protocols:
+      thrift_compact:
+        endpoint: 
+      thrift_http:
+        endpoint: 
+      grpc:
+        endpoint: 
+  otlp:
+    protocols:
+      grpc:
+      http:
+  zipkin:
+    endpoint:
+processors:
+
+extensions:
+  health_check: {}
+exporters:
+  logging:
+    loglevel: debug
+  otlphttp:
+    traces_endpoint: SUMOLOGIC_HTTP_TRACES_URL
+
+service:
+  extensions: [health_check]
+  pipelines:
+    traces:
+      receivers: [jaeger, otlp, zipkin]
+      processors: []
+      exporters: [logging, otlphttp]

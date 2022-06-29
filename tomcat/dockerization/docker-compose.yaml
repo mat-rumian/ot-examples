@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+
+  tomcat-service:
+    build:
+      context: ../.
+      dockerfile: Dockerfile
+    container_name: tomcat-service
+    hostname: tomcat-service
+    command:
+      - /apache-tomcat/bin/catalina.sh
+      - run
+    environment:
+      - CATALINA_HOME=/apache-tomcat
+      - CATALINA_OPTS=-javaagent:./lib/opentelemetry-javaagent.jar
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_TRACES_PROTOCOL=http/protobuf
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces
+      - OTEL_SERVICE_NAME=tomcat-svc
+      - OTEL_RESOURCE_ATTRIBUTES=application=tomcat-app
+    ports:
+    - 8080:8080
+    expose:
+      - 8080
+    depends_on:
+      - otelcol
+
+
+  otelcol:
+    image: public.ecr.aws/sumologic/opentelemetry-collector:latest
+    container_name: otelcol
+    hostname: otelcol
+    command: ["--config=/etc/config.yaml"]
+    volumes:
+        - ./otelcol.yaml:/etc/config.yaml
+    ports:
+      - 8888:8888
+    expose:
+      - 8888
