@@ -3,7 +3,7 @@
 const opentelemetry = require('@opentelemetry/api');
 
 const { NodeTracerProvider } = require('@opentelemetry/sdk-trace-node');
-const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-proto');
+const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-http');
 const { registerInstrumentations } = require('@opentelemetry/instrumentation');
 const { Resource } = require('@opentelemetry/resources');
 
@@ -28,7 +28,7 @@ module.exports = (name) => {
  const provider = new NodeTracerProvider({ resource: resources});
 
  const exporterOptions = {
-  url: 'http://otelcol:55681/v1/traces',
+  url: 'http://localhost:4318/v1/traces',
  }
 
  // Uncomment in case of enabled ConsoleExporter

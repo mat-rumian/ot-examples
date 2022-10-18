@@ -6,11 +6,12 @@ const tracer = require('./tracer')('client');
 const http = require('http');
 
 http.get({
-      host: 'express-svc',
+      host: 'localhost',
       port: 8081,
       path: '/run_test',
     }, (response) => {
       const body = [];
+      console.log(response);
       response.on('data', (chunk) => body.push(chunk));
       response.on('end', () => {
       });
