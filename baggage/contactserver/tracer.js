@@ -21,14 +21,14 @@ const { BatchSpanProcessor } = require('@opentelemetry/sdk-trace-base');
 module.exports = (name) => {
  const resources = new Resource({
   'service.name': name,
-  'application': 'YOUR_APPLICATION_NAME',
+  'application': 'development',
   //'ANY_OTHER_ATTRIBUTE_KEY': 'ANY_OTHER_ATTRIBUTE_VALUE',
  });
 
  const provider = new NodeTracerProvider({ resource: resources});
 
  const exporterOptions = {
-  url: 'http://localhost:4318/v1/traces',
+  url: process.env.SUMO_HTTP_TRACES_URL
  }
 
  // Uncomment in case of enabled ConsoleExporter

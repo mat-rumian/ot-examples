@@ -8,7 +8,7 @@ const axios = require('axios').default;
 // Setup express
 const app = express();
 const PORT = 8081;
-const HOST = 'express-svc'
+const HOST = 'localhost'
 
 const getCrudController = () => {
   const router = express.Router();
