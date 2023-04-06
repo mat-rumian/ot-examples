@@ -31,6 +31,7 @@ docker-compose up
 To generate traffic with `baggage` please delete one of the uses from the Contact list.
 
 ## Examples
+- [Custom resource attribute in every span in RUM](./contactmanager/src/App.js#L18)
 - [Custom attribute in Frontend RUM](./contactmanager/src/components/Contacts/Contact.js#L30-L37)
 - [Baggage creation](./contactmanager/src/components/Contacts/Contact.js#L39-L73)
 - [Custom attribute in nodejs](./contactserver/express-http-test.js#L55-L76)

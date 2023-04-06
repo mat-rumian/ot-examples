@@ -15,7 +15,7 @@ import {HashRouter as Router,Route,Switch} from 'react-router-dom';
 import './App.css';
 
 function App() {
-   
+  window.sumoLogicOpenTelemetryRum.setDefaultAttribute("everySpan","hasThisAttribute")
   return (
       <Provider >
       <Router>

@@ -15,6 +15,7 @@ services:
     expose:
       - 8081
     command: ["node", "express-http-test.js"]
+    restart: always
 
   rum-web:
     build:
@@ -25,6 +26,7 @@ services:
       - REACT_APP_COLLECTION_SOURCE_URL=${REACT_APP_COLLECTION_SOURCE_URL}
     hostname: rum-web
     command: ["npm", "run", "start"]
+    restart: always
     ports:
       - 3000:3000
     depends_on:
