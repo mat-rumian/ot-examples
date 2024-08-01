@@ -1,6 +1,6 @@
 import { S3 } from 'aws-sdk';
 
-export const listS3Buckets = async (): Promise<string[]> => {
+const listS3Buckets = async (): Promise<string[]> => {
   const s3 = new S3();
   try {
     const response = await s3.listBuckets().promise();
@@ -10,3 +10,5 @@ export const listS3Buckets = async (): Promise<string[]> => {
     throw error;
   }
 };
+
+module.exports = { listS3Buckets };

@@ -1,4 +1,4 @@
-import { listS3Buckets } from './handler';
+const { listS3Buckets } = require('./handler');
 
 const handler = async (event: any): Promise<any> => {
   try {
